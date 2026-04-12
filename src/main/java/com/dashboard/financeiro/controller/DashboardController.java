@@ -1,5 +1,6 @@
 package com.dashboard.financeiro.controller;
 
+import com.dashboard.financeiro.dto.AlertaDTO;
 import com.dashboard.financeiro.dto.CategoriaDTO;
 import com.dashboard.financeiro.dto.DashboardDTO;
 import com.dashboard.financeiro.service.DashboardService;
@@ -23,5 +24,12 @@ public class DashboardController {
     @GetMapping("/categorias")
     public List<CategoriaDTO> categorias(@RequestParam int mes, @RequestParam int ano){
         return dashboardService.getGastosPorCategoria(mes, ano);
+    }
+    @GetMapping("/alertas")
+    public List<AlertaDTO> alertas(
+            @RequestParam int mes,
+            @RequestParam int ano
+    ) {
+        return dashboardService.verificarAlertas(mes, ano);
     }
 }
