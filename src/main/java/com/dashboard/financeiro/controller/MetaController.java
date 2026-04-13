@@ -2,12 +2,14 @@ package com.dashboard.financeiro.controller;
 
 import com.dashboard.financeiro.model.Meta;
 import com.dashboard.financeiro.service.MetaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import lombok.*;
 
 import java.util.List;
 
 @RestController
+@Tag(name = "Metas", description = "Controle de metas financeiras")
 @RequestMapping("/metas")
 @CrossOrigin("*")
 @AllArgsConstructor
