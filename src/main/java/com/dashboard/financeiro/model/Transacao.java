@@ -6,6 +6,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.time.LocalDate;
+import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -19,7 +20,7 @@ public class Transacao {
 
     private String descricao;
 
-    private Double valor;
+    private BigDecimal valor;
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
 

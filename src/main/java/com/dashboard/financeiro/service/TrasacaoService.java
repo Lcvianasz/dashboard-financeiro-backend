@@ -1,5 +1,8 @@
 package com.dashboard.financeiro.service;
 
+import com.dashboard.financeiro.dto.TransacaoResponseDTO;
+import com.dashboard.financeiro.dto.TransacaoRequestDTO;
+import com.dashboard.financeiro.model.TipoTransacao;
 import com.dashboard.financeiro.model.Transacao;
 import com.dashboard.financeiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
@@ -13,13 +16,39 @@ public class TrasacaoService {
 
     private final TransacaoRepository transacaoRepository;
 
-    public Transacao salvar(Transacao t){
+    public Transacao salvar(TransacaoRequestDTO dto){
+        Transacao t = new Transacao();
+        t.setDescricao(dto.getDescricao());
+        t.setValor(dto.getValor());
+        t.setTipo(TipoTransacao.valueOf(dto.getTipo()));
+        t.setCategoria(dto.getCategoria());
+        t.setData(dto.getData());
+
         return transacaoRepository.save(t);
     }
-    public List<Transacao> listar(){
-        return transacaoRepository.findAll();
+
+    public TransacaoResponseDTO toDTO(Transacao t){
+        return new TransacaoResponseDTO(
+                t.getId(),
+                t.getDescricao(),
+                t.getValor(),
+                t.getTipo().name(),
+                t.getCategoria(),
+                t.getData()
+        );
     }
-    public void deletar(Long id) {
+
+    public List<TransacaoResponseDTO> listar(){
+        return transacaoRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    public void deletar(Long id){
+        if(!transacaoRepository.existsById(id)){
+            throw new RuntimeException("Transação não encontrada");
+        }
         transacaoRepository.deleteById(id);
     }
 }
