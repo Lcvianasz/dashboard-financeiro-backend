@@ -18,4 +18,11 @@ public class MetaService {
     public List<Meta> listar(int mes, int ano){
         return metaRepository.findByMesAndAno(mes, ano);
     }
+
+    public void deletar(Long id) {
+        if (!metaRepository.existsById(id)){
+            throw new RuntimeException("Meta não encontrada");
+        }
+        metaRepository.deleteById(id);
+    }
 }

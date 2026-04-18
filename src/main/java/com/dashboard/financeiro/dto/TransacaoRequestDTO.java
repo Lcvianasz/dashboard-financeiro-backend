@@ -9,13 +9,13 @@ import lombok.Data;
 public class TransacaoRequestDTO {
     @NotBlank
     private String descricao;
-    @NotBlank
+    @NotNull
     @Positive
     private BigDecimal valor;
     @NotBlank
     private String tipo;
     @NotBlank
     private String categoria;
-    @NotBlank
+    @NotNull
     private LocalDate data;
 }

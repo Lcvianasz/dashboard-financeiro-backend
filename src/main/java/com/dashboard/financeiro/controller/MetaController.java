@@ -3,6 +3,7 @@ package com.dashboard.financeiro.controller;
 import com.dashboard.financeiro.model.Meta;
 import com.dashboard.financeiro.service.MetaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.*;
 
@@ -23,5 +24,11 @@ public class MetaController {
     @GetMapping
     public List<Meta> listar(@RequestParam int mes, @RequestParam int ano){
         return metaService.listar(mes, ano);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarMeta(@PathVariable Long id){
+        metaService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

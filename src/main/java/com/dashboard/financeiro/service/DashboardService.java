@@ -7,9 +7,10 @@ import com.dashboard.financeiro.model.Meta;
 import com.dashboard.financeiro.model.TipoTransacao;
 import com.dashboard.financeiro.repository.MetaRepository;
 import com.dashboard.financeiro.repository.TransacaoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,7 @@ public class DashboardService {
     private final TransacaoRepository repository;
     private final MetaRepository metaRepository;
 
-
     public DashboardDTO getResumoMensal(int mes, int ano) {
-
         LocalDate inicio = LocalDate.of(ano, mes, 1);
         LocalDate fim = inicio.withDayOfMonth(inicio.lengthOfMonth());
 
@@ -39,24 +38,25 @@ public class DashboardService {
     }
 
     public List<CategoriaDTO> getGastosPorCategoria(int mes, int ano) {
-
         LocalDate inicio = LocalDate.of(ano, mes, 1);
         LocalDate fim = inicio.withDayOfMonth(inicio.lengthOfMonth());
 
         List<Object[]> resultados = repository.gastosPorCategoria(inicio, fim);
 
-        double totalGeral = resultados.stream()
-                .mapToDouble(r -> (Double) r[1])
-                .sum();
+        // Calcula o total geral usando BigDecimal para evitar problemas de cast
+        BigDecimal totalGeral = resultados.stream()
+                .map(r -> (BigDecimal) r[1])   // agora é BigDecimal
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         List<CategoriaDTO> lista = new ArrayList<>();
 
         for (Object[] r : resultados) {
             String categoria = (String) r[0];
-            Double total = (Double) r[1];
+            BigDecimal totalBig = (BigDecimal) r[1];
+            double total = totalBig.doubleValue();  // conversão segura
 
-            double porcentagem = totalGeral > 0
-                    ? (total / totalGeral) * 100
+            double porcentagem = totalGeral.compareTo(BigDecimal.ZERO) > 0
+                    ? (total / totalGeral.doubleValue()) * 100
                     : 0;
 
             lista.add(new CategoriaDTO(categoria, total, porcentagem));
@@ -66,7 +66,6 @@ public class DashboardService {
     }
 
     public List<AlertaDTO> verificarAlertas(int mes, int ano) {
-
         LocalDate inicio = LocalDate.of(ano, mes, 1);
         LocalDate fim = inicio.withDayOfMonth(inicio.lengthOfMonth());
 
@@ -76,10 +75,10 @@ public class DashboardService {
         List<AlertaDTO> alertas = new ArrayList<>();
 
         for (Meta meta : metas) {
-
+            // Busca o gasto como BigDecimal
             double gasto = gastos.stream()
                     .filter(g -> g[0].equals(meta.getCategoria()))
-                    .map(g -> (Double) g[1])
+                    .map(g -> ((BigDecimal) g[1]).doubleValue())  // conversão segura
                     .findFirst()
                     .orElse(0.0);
 
