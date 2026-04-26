@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Metas", description = "Controle de metas financeiras")
-@RequestMapping("/metas")
+@RequestMapping("/api/metas")
 @CrossOrigin("*")
 @AllArgsConstructor
 public class MetaController {

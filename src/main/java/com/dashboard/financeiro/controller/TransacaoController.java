@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Tag(name = "Transações", description = "Operações de entradas e saídas financeiras")
 @RestController
-@RequestMapping("/transacoes")
+@RequestMapping("/api/transacoes")
 @CrossOrigin("*")
 public class TransacaoController {
 

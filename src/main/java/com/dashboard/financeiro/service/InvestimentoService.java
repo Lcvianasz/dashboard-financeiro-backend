@@ -44,7 +44,6 @@ public class InvestimentoService {
         transacao.setObservacao(request.getObservacao());
         transacaoRepository.save(transacao);
 
-        // Atualiza posição (preço médio ponderado e quantidade)
         Posicao posicao = posicaoRepository.findByCarteiraAndAtivo(carteira, ativo)
                 .orElse(new Posicao());
         if (posicao.getId() == null) {

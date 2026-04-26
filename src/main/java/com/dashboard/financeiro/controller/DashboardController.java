@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @RestController
-@RequestMapping("/dashboard")
+@RequestMapping("/api/dashboard")
 @CrossOrigin("*")
 @AllArgsConstructor
 public class DashboardController {
